@@ -1,6 +1,6 @@
 #include "RingBuff.h"
 
-namespace network
+namespace core
 {
 	CRingBuff::CRingBuff(uint32 capacity) :_capacity(capacity), _front(0), _end(0), _size(0), _buff(new char[_capacity]), _writerv(new SWritev[2]) {
 
