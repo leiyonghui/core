@@ -10,6 +10,8 @@
 #include <functional>
 #include <memory>
 #include <assert.h>
+#include <thread>
+#include <mutex>
 #include "TimeHelp.h"
 #include "Singleton.h"
 

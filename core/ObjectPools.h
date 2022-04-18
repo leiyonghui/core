@@ -55,24 +55,20 @@ namespace core
 		}
 
 		template<class ...Args>
-		std::shared_ptr<T> create(Args ...args)
+		std::shared_ptr<T> create(Args&& ...args)
 		{
 			auto ptr = popObject();
 			ptr->setUsing(true);
 			ptr->onAwake(std::forward<Args>(args)...);
-			++_useCount;
-			--_freeCount;
 			return std::shared_ptr<T>(ptr, [this](T* ptr) { this->recycle(ptr); });
 		}
 
 		template<class ...Args>
-		std::unique_ptr<T, Deleter> createUnique(Args ...args)
+		std::unique_ptr<T, Deleter> createUnique(Args&& ...args)
 		{
 			auto ptr = popObject();
 			ptr->setUsing(true);
 			ptr->onAwake(std::forward<Args>(args)...);
-			++_useCount;
-			--_freeCount;
 			return std::unique_ptr<T, Deleter>(ptr, [this](T* ptr) { this->recycle(ptr); });
 		}
 
@@ -89,21 +85,26 @@ namespace core
 	private:
 		static CObjectPool<T>* _instance;
 
-		List _freeObjects;
-		int32 _useCount;
-		int32 _freeCount;
+		List	_freeObjects;
+		int32	_useCount;
+		int32	_freeCount;
+		std::mutex _mutex;
 
 		T* popObject()
 		{
+			std::lock_guard<std::mutex> lock(_mutex);
 			while (_freeObjects.empty())
 				assignObjs(INIT_OBJECT_SIZE);
 			T* ptr = _freeObjects.front();
 			_freeObjects.pop_front();
+			++_useCount;
+			--_freeCount;
 			return ptr;
 		}
 
 		void recycle(T* ptr) {
 			if (ptr && ptr->isUsing()) {
+				std::lock_guard<std::mutex> lock(_mutex);
 				ptr->onRecycle();
 				ptr->setUsing(false);
 				_freeObjects.push_back(ptr);
