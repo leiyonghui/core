@@ -12,6 +12,7 @@
     <ClInclude Include="Common.h" />
     <ClInclude Include="Configs.h" />
     <ClInclude Include="RingBuff.h" />
+    <ClInclude Include="KeyPool.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ObjectPools.cpp" />
