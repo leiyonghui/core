@@ -23,6 +23,7 @@
     <ClInclude Include="Configs.h" />
     <ClInclude Include="FastNode.h" />
     <ClInclude Include="Macro.h" />
+    <ClInclude Include="KeyPool.h" />
     <ClInclude Include="NonCopyable.h" />
     <ClInclude Include="ObjectPools.h" />
     <ClInclude Include="RingBuff.h" />
