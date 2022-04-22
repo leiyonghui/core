@@ -14,6 +14,7 @@
 #include <mutex>
 #include "TimeHelp.h"
 #include "Singleton.h"
+#include "Macro.h"
 
 using std::placeholders::_1;
 using std::placeholders::_2;
