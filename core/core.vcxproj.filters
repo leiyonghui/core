@@ -14,6 +14,7 @@
     <ClInclude Include="RingBuff.h" />
     <ClInclude Include="Macro.h" />
     <ClInclude Include="KeyPool.h" />
+    <ClInclude Include="Queue.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ObjectPools.cpp" />
