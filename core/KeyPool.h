@@ -3,17 +3,18 @@
 
 namespace core
 {
+	template<uint32 Bytes = 16, std::enable_if_t<Bytes <= 20, int32> = 0>
 	class CkeyPool
 	{
 		CkeyPool(const CkeyPool&) = delete;
 		CkeyPool& operator = (const CkeyPool&) = delete;
 
 	public:
-		static const uint32_t key_maxnum = 0x10000;//十六进制，65536
-		static const uint32_t key_suffix = 0xffff;//65535
-		static const uint32_t key_prefix_min = 0x10000;
-		static const uint32_t key_prefix_inc = 0x10000;
-		static const uint32_t key_prefix_max = 0xffff0000;//4294901760
+		static const uint32_t key_maxnum = (1 << Bytes);//0x10000;//十六进制，65536
+		static const uint32_t key_suffix = (1 << Bytes) - 1; //0xffff;//65535
+		static const uint32_t key_prefix_min = (1 << Bytes);//0x10000;
+		static const uint32_t key_prefix_inc = (1 << Bytes);//0x10000;
+		static const uint32_t key_prefix_max = (~((1 << Bytes) - 1));//0xffff0000;//4294901760
 
 		static uint32_t index(uint32_t key)
 		{
