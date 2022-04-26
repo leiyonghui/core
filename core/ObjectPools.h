@@ -3,6 +3,17 @@
 
 namespace core
 {
+	class CPoolObject
+	{
+		bool _using;
+	public:
+		CPoolObject() :_using(false) {}
+
+		void setUsing(bool use) { _using = use; };
+
+		bool isUsing() const { return _using; }
+	};
+
 	class CObjectPoolMonitor
 	{
 		using ObjectMap = std::map<std::string, std::function<void()>>;
@@ -41,12 +52,10 @@ namespace core
 	class CObjectPool
 	{
 		using List = std::list<T*>;
-		using Iterator = typename std::list<T*>::iterator;
 		using Deleter = typename std::function<void(T*)>;
 	public:
-		const static Iterator NullIter;
 
-		CObjectPool() :_useCount(0), _freeCount(0) {
+		CObjectPool(std::enable_if_t <std::is_base_of<CPoolObject, T>::value, int>) :_useCount(0), _freeCount(0) {
 			CObjectPoolMonitor::monitorPool(typeid(T).name(), [this]() { this->printInfo(); });
 		}
 
@@ -104,9 +113,9 @@ namespace core
 
 		void recycle(T* ptr) {
 			if (ptr && ptr->isUsing()) {
-				std::lock_guard<std::mutex> lock(_mutex);
 				ptr->onRecycle();
 				ptr->setUsing(false);
+				std::lock_guard<std::mutex> lock(_mutex);
 				_freeObjects.push_back(ptr);
 				++_freeCount;
 				--_useCount;
@@ -120,20 +129,6 @@ namespace core
 	};
 
 	template<class T>
-	const typename CObjectPool<T>::Iterator CObjectPool<T>::NullIter = CObjectPool<T>::Iterator();
-
-	template<class T>
-	CObjectPool<T>* CObjectPool<T>::_instance = new CObjectPool<T>();
-
-	class CPoolObject
-	{
-		bool _using;
-	public:
-		CPoolObject() :_using(false) {}
-
-		void setUsing(bool use) { _using = use; };
-
-		bool isUsing() const { return _using; }
-	};
+	CObjectPool<T>* CObjectPool<T>::_instance = nullptr;
 
 }
