@@ -7,6 +7,7 @@
 #include <string>
 #include <string.h>
 #include <list>
+#include <array>
 #include <functional>
 #include <memory>
 #include <assert.h>
