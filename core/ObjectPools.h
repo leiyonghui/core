@@ -11,6 +11,8 @@ namespace core
 		void setUsing(bool use) { _using = use; };
 
 		bool isUsing() const { return _using; }
+
+		virtual void onRecycle() = 0; //注意多线程
 	private:
 		bool _using;
 	};
