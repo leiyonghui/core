@@ -4,10 +4,10 @@
 namespace core
 {
 	template<uint32 Bytes = 16, std::enable_if_t<Bytes <= 20, int32> = 0>
-	class CKeyPool
+	class KeyPool
 	{
-		CKeyPool(const CKeyPool&) = delete;
-		CKeyPool& operator = (const CKeyPool&) = delete;
+		KeyPool(const KeyPool&) = delete;
+		KeyPool& operator = (const KeyPool&) = delete;
 
 	public:
 		static const uint32_t key_maxnum = (1 << Bytes);//0x10000;//十六进制，65536
@@ -21,7 +21,7 @@ namespace core
 			return key & key_suffix;//去掉高16位
 		}
 
-		CKeyPool()
+		KeyPool()
 		{
 			for (uint32_t i = 0; i < key_maxnum; ++i)
 			{
@@ -29,10 +29,6 @@ namespace core
 			}
 		}
 
-		~CKeyPool()
-		{
-
-		}
 
 		uint32_t pop()
 		{
