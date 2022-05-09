@@ -59,7 +59,7 @@ namespace core
 		using Deleter = typename std::function<void(T*)>;
 	public:
 
-		CObjectPool(std::enable_if_t <std::is_base_of<CPoolObject, T>::value, int> = 0) :_useCount(0), _freeCount(0) {
+		CObjectPool(std::enable_if_t <std::is_base_of<CPoolObject, T>::value, int> initSize = INIT_SIZE) :_useCount(0), _freeCount(0), _initSize(initSize){
 			CObjectPoolMonitor::monitorPool(typeid(T).name(), []() { CObjectPool<T>::Instance()->printInfo(); });
 		}
 
@@ -98,7 +98,7 @@ namespace core
 			return _instance;
 		}
 
-		static void Instance(T* ptr)
+		static void Instance(CObjectPool<T>* ptr)
 		{
 			if (_instance)
 				delete _instance;
@@ -111,6 +111,7 @@ namespace core
 		List	_freeObjects;
 		int32	_useCount;
 		int32	_freeCount;
+		int32   _initSize;
 		std::mutex _mutex;
 
 		T* popObject()
@@ -119,7 +120,7 @@ namespace core
 			{
 				std::lock_guard<std::mutex> lock(_mutex);
 				while (_freeObjects.empty())
-					assignObjs(INIT_SIZE);
+					assignObjs(_initSize);
 				ptr = _freeObjects.front();
 				_freeObjects.pop_front();
 				++_useCount;
