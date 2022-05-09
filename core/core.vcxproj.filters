@@ -17,7 +17,6 @@
     <ClInclude Include="Queue.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ObjectPools.cpp" />
     <ClCompile Include="TimeHelp.cpp" />
     <ClCompile Include="Timers.cpp" />
     <ClCompile Include="TimerSet.cpp" />

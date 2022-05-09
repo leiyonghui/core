@@ -30,3 +30,6 @@
 typeof(X) x_ = (X); \
 typeof(Y) y_ = (Y); \
 (x_ < y_) ? x_ : y_; })
+
+//#define USING_SHARE_PTR(Name) typedef std::shared_ptr<Name> Name##Ptr
+#define USING_SHARED_PTR(Name) using Name##Ptr = std::shared_ptr<Name>

@@ -35,7 +35,6 @@
     <ClInclude Include="TimerWheel.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ObjectPools.cpp" />
     <ClCompile Include="RingBuff.cpp" />
     <ClCompile Include="TimeHelp.cpp" />
     <ClCompile Include="Timers.cpp" />

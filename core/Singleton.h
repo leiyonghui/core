@@ -27,5 +27,5 @@ namespace core
 	};
 
 	template<typename T>
-	T* CSingleton<T>::_instance = NULL;
+	T* CSingleton<T>::_instance = nullptr;
 }

@@ -1,7 +1,7 @@
 #pragma once
 #include "Configs.h"
 
-namespace fio
+namespace core
 {
 	template<typename T>
 	class Queue
