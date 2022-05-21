@@ -7,6 +7,7 @@ namespace core
 	{
 	public:
 		CPoolObject() :_using(false) {}
+		virtual ~CPoolObject() = default;
 
 		void setUsing(bool use) { _using = use; };
 
