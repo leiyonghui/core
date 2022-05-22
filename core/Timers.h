@@ -82,7 +82,6 @@ namespace core
 		friend class timerwheel::TimerWheel;
 		friend class timerset::TimerSetImpl;
 
-
 		using Duration = std::chrono::milliseconds;
 		using Datetime = std::chrono::system_clock::time_point;
 

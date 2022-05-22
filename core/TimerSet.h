@@ -19,7 +19,7 @@ namespace core
 
 			virtual void delTimer(TimerEvent* event) override;
 
-		protected:
+		private:
 			TimerSetImpl* _timer;
 		};
 
