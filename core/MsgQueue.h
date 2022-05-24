@@ -9,9 +9,14 @@ namespace core
 	class MsgQueue : CNoncopyable
 	{
 	public:
-		void pushBack(T packet)
+		void pushBack(const T& packet)
 		{
 			_queue.push(packet);
+		}
+
+		void pushBack(T&& packet)
+		{
+			_queue.push(std::forward(packet));
 		}
 
 		void bindDispatcher(const std::function<void(const T&)> &func)
