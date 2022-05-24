@@ -25,6 +25,12 @@ namespace core
 
 		}
 
+		void push(const T& item)
+		{
+			std::unique_lock<std::mutex> locker(_mutex);
+			_queue.push_back(item);
+		}
+
 		void push(const T& item, bool& notify)
 		{
 			std::unique_lock<std::mutex> locker(_mutex);

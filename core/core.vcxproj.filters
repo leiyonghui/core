@@ -11,17 +11,17 @@
     <ClInclude Include="TimerWheel.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="Configs.h" />
-    <ClInclude Include="RingBuff.h" />
     <ClInclude Include="Macro.h" />
     <ClInclude Include="KeyPool.h" />
     <ClInclude Include="Queue.h" />
+    <ClInclude Include="MsgQueue.h" />
+    <ClInclude Include="SkipList.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TimeHelp.cpp" />
     <ClCompile Include="Timers.cpp" />
     <ClCompile Include="TimerSet.cpp" />
     <ClCompile Include="TimerWheel.cpp" />
-    <ClCompile Include="RingBuff.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="CMakeLists.txt" />

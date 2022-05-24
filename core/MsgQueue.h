@@ -32,9 +32,9 @@ namespace core
 			}
 		}
 
-		bool pollOne(const int64 timeout, const boost::function<bool(const T &packet)> &condition)
+		bool pollOne(const int64 timeout, const std::function<bool(const T &packet)> &condition)
 		{
-			for (auto now = std::chrono::steady_clock::now(), end = std::max(now + timeout, now); now <= end; now = std::chrono::steady_clock::now())
+			for (auto now = TimeHelp::clock_ms(), end = TimeHelp::clock_ms() + 1ms * timeout; now <= end; now = TimeHelp::clock_ms())
 			{
 				_queue.pop(_querying);
 				if (_querying.empty())
@@ -65,7 +65,7 @@ namespace core
 				_dispatcher(packet);
 			}
 			catch (std::exception &ex) {
-				CORE_LOG_ERROR("dispatch exception", ex.what(), object->type());
+				core_log_error("dispatch exception", ex.what());
 			}			
 		}
 

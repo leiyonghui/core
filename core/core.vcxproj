@@ -24,18 +24,18 @@
     <ClInclude Include="FastNode.h" />
     <ClInclude Include="Macro.h" />
     <ClInclude Include="KeyPool.h" />
+    <ClInclude Include="MsgQueue.h" />
     <ClInclude Include="NonCopyable.h" />
     <ClInclude Include="ObjectPools.h" />
     <ClInclude Include="Queue.h" />
-    <ClInclude Include="RingBuff.h" />
     <ClInclude Include="Singleton.h" />
+    <ClInclude Include="SkipList.h" />
     <ClInclude Include="TimeHelp.h" />
     <ClInclude Include="Timers.h" />
     <ClInclude Include="TimerSet.h" />
     <ClInclude Include="TimerWheel.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="RingBuff.cpp" />
     <ClCompile Include="TimeHelp.cpp" />
     <ClCompile Include="Timers.cpp" />
     <ClCompile Include="TimerSet.cpp" />
