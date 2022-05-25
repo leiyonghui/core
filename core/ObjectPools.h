@@ -13,7 +13,7 @@ namespace core
 
 		bool isUsing() const { return _using; }
 
-		virtual void onRecycle() = 0; //注意多线程
+		virtual void onRecycle() = 0;
 	private:
 		bool _using;
 	};
@@ -109,24 +109,38 @@ namespace core
 	private:
 		static CObjectPool<T>* _instance;
 
+		std::mutex _mutexFree;
+		std::mutex _mutexRecycle;
 		List	_freeObjects;
+		List	_recycleObjects;
 		int32	_useCount;
-		int32	_freeCount;
-		int32   _initSize;
-		std::mutex _mutex;
+		atomic_int	_freeCount;
+		atomic_int   _initSize;
 
 		T* popObject()
 		{
 			T* ptr = nullptr;
 			{
-				std::lock_guard<std::mutex> lock(_mutex);
-				while (_freeObjects.empty())
-					assignObjs(_initSize);
+				std::lock_guard<std::mutex> lock(_mutexFree);
+				if (_freeObjects.empty())
+				{
+					int32 add = 0;
+					{
+						std::lock_guard<std::mutex> lock2(_mutexRecycle);
+						if (!_recycleObjects.empty())
+						{
+							add = int32(_recycleObjects.size());
+							_freeObjects.splice(_freeObjects.end(), _recycleObjects);
+						}
+					}
+					for (int32 i = 0; i < _initSize - add; ++i, ++_freeCount)
+						_freeObjects.push_back(new T());
+				}
 				ptr = _freeObjects.front();
 				_freeObjects.pop_front();
-				++_useCount;
-				--_freeCount;
 			}
+			++_useCount;
+			--_freeCount;
 			return ptr;
 		}
 
@@ -135,16 +149,11 @@ namespace core
 			ptr->onRecycle();
 			ptr->setUsing(false);
 			{
-				std::lock_guard<std::mutex> lock(_mutex);
-				_freeObjects.push_back(ptr);
-				++_freeCount;
-				--_useCount;
+				std::lock_guard<std::mutex> lock(_mutexRecycle);
+				_recycleObjects.push_back(ptr);
 			}
-		}
-
-		void assignObjs(int32 amount) {
-			for (int32 i = 0; i < amount; ++i, ++_freeCount)
-				_freeObjects.push_back(new T());
+			++_freeCount;
+			--_useCount;
 		}
 	};
 
