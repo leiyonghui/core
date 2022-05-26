@@ -19,9 +19,14 @@ namespace core
 			_queue.push(std::forward(packet));
 		}
 
-		void bindDispatcher(const std::function<void(const T&)> &func)
+		void bindDispatcher(const std::function<void(T&)> &func)
 		{
 			_dispatcher = func;
+		}
+
+		void bindDispatcher(std::function<void(T&)>&& func)
+		{
+			_dispatcher = std::move(func);
 		}
 
 		void poll(bool& busy)

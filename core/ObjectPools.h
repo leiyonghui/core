@@ -114,8 +114,8 @@ namespace core
 		List	_freeObjects;
 		List	_recycleObjects;
 		int32	_useCount;
-		atomic_int	_freeCount;
-		atomic_int   _initSize;
+		std::atomic_int	_freeCount;
+		std::atomic_int   _initSize;
 
 		T* popObject()
 		{
