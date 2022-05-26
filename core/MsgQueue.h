@@ -9,6 +9,8 @@ namespace core
 	class MsgQueue : CNoncopyable
 	{
 	public:
+		std::function<void(const T&)> _dispatcher;
+
 		void pushBack(const T& packet)
 		{
 			_queue.push(packet);
@@ -19,12 +21,12 @@ namespace core
 			_queue.push(std::forward(packet));
 		}
 
-		void bindDispatcher(const std::function<void(T&)> &func)
+		void bindDispatcher(const std::function<void(const T&)> &func)
 		{
 			_dispatcher = func;
 		}
 
-		void bindDispatcher(std::function<void(T&)>&& func)
+		void bindDispatcher(std::function<void(const T&)>&& func)
 		{
 			_dispatcher = std::move(func);
 		}
@@ -83,6 +85,5 @@ namespace core
 		Queue<T> _queue;
 		std::list<T> _querying;
 		std::list<T> _polling;
-		std::function<void(const T&)> _dispatcher;
 	};
 }

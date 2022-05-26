@@ -89,8 +89,12 @@ namespace core
 
 		void printInfo()
 		{
-			core_log_info(typeid(T).name(), "using:", _useCount, "free:", _freeCount);
+			core_log_info(typeid(T).name(), "using:", getUseCount(), "free:", getFreeCount());
 		}
+
+		int32 getUseCount() const { return _useCount; }
+
+		int32 getFreeCount() const { return _freeCount; }
 
 		static CObjectPool<T>* Instance()
 		{
