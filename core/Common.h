@@ -31,4 +31,11 @@ namespace core
 		auto iter = conatiner.insert({key, value});
 		return iter.second;
 	}
+
+	template<class K, class V>
+	bool insert(const std::unordered_map<K, V>& conatiner, const K& key, const V& value)
+	{
+		auto iter = conatiner.insert({ key, value });
+		return iter.second;
+	}
 }
