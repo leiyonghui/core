@@ -46,7 +46,7 @@ namespace core
 
 		bool pollOne(const int64 timeout, const std::function<bool(const T &packet)> &condition)
 		{
-			for (auto now = TimeHelp::clock_ms(), end = TimeHelp::clock_ms() + 1ms * timeout; now <= end; now = TimeHelp::clock_ms())
+			for (auto now = int64(TimeHelp::clock_ms().count()), end = int64(TimeHelp::clock_ms().count()) + 1000 * timeout; now <= end; now = TimeHelp::clock_ms().count())
 			{
 				_queue.pop(_querying);
 				if (_querying.empty())

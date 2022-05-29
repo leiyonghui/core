@@ -13,6 +13,7 @@
 #include <assert.h>
 #include <thread>
 #include <mutex>
+#include <atomic>
 #include <any>
 #include "TimeHelp.h"
 #include "Singleton.h"
