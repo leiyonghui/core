@@ -42,8 +42,9 @@ namespace core
 
 		void push(uint32_t key)
 		{
+			auto k = remake(key);
 			std::unique_lock<std::mutex> lock(_mutex);
-			_keys.push_back(remake(key));
+			_keys.push_back(k);
 		}
 
 	private:

@@ -74,7 +74,7 @@ namespace core
 		}
 
 		auto dis = TimeHelp::clock().count() - _beginTick;
-		_aveTime[key] = uint64((_aveTime[key] + dis) * 0.5);
+		_aveTime[key] = uint64((uint64(_aveTime[key]) + dis) / 2);
 
 		if (_maxTicks[key] < dis)
 		{
