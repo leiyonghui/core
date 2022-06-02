@@ -3,6 +3,42 @@
 
 namespace core
 {
+	template<typename T>
+	struct CEmpty
+	{
+		static const T Empty;
+	};
+
+	template<typename T>
+	const T CEmpty<T>::Empty = T();
+
+	class CFinalize
+	{
+	public:
+		using Func = std::function<void()>;
+
+		CFinalize(const Func& func): _func(func){}
+		CFinalize(Func&& func) : _func(std::move(func)){}
+
+		CFinalize& operator =(const Func& func) {
+			_func = func;
+			return *this;
+		}
+
+		CFinalize& operator =(Func&& func) {
+			_func = std::move(func);
+			return *this;
+		}
+
+		~CFinalize() {
+			if (_func) 
+				_func();
+		}
+
+	private:
+		std::function<void()> _func;
+	};
+
 	template<class Key, class Value, class Pr>
 	Value find(const std::map<Key, Value, Pr>& container, const Key& key, const Value& vaule) /*-> decltype(vaule)*/
 	{
