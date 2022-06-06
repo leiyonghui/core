@@ -33,3 +33,6 @@ typeof(Y) y_ = (Y); \
 
 //#define USING_SHARE_PTR(Name) typedef std::shared_ptr<Name> Name##Ptr
 #define USING_SHARED_PTR(Name) using Name##Ptr = std::shared_ptr<Name>
+
+#define DYNAMIC_CAST(CLASS, VALUE) std::dynamic_pointer_cast<CALSS>(VALUE)
+#define STATIC_CAST(CLASS, VALUE) std::static_pointer_cast<CLASS>(CALUE)
