@@ -95,14 +95,21 @@ namespace core
 			}
 		}
 
-		template<typename Disposer>
-		void cleanup(Disposer disposer)
+		//template<typename Disposer>
+		//void dispose(Disposer disposer)
+		//{
+		//	std::unique_lock<std::mutex> locker(_mutex);
+		//	for (typename std::list<T>::iterator iter = _queue.begin(); iter != _queue.end(); ++iter)
+		//	{
+		//		disposer(*iter);
+		//	}
+		//	_queue.clear();
+		//}
+
+		bool empty()
 		{
-			for (typename std::list<T>::iterator iter = _queue.begin(); iter != _queue.end(); ++iter)
-			{
-				disposer(*iter);
-			}
-			_queue.clear();
+			std::unique_lock<std::mutex> locker(_mutex);
+			return _queue.empty();
 		}
 
 	private:
