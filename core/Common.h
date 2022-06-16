@@ -75,6 +75,13 @@ namespace core
 		return iter.second;
 	}
 
+	template<class K, class Pr>
+	bool insert(std::set<K, Pr>& conatiner, const K& key)
+	{
+		auto iter = conatiner.insert(key);
+		return iter.second;
+	}
+
 	template<class K, class V>
 	bool remove(std::map<K, V>& conatiner, const K &key)
 	{
@@ -83,6 +90,12 @@ namespace core
 
 	template<class K, class V>
 	bool remove(std::unordered_map<K, V>& conatiner, const K& key)
+	{
+		return conatiner.erase(key) > 0;
+	}
+
+	template<class K, class Pr>
+	bool remove(std::set<K, Pr>& conatiner, const K& key)
 	{
 		return conatiner.erase(key) > 0;
 	}
@@ -107,5 +120,11 @@ namespace core
 			return false;
 		}
 		return true;
+	}
+
+	template<class Key, class Pr>
+	bool exist(const std::set<Key, Pr>& container, const Key& key)
+	{
+		return container.count(key);
 	}
 }
