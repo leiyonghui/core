@@ -67,6 +67,7 @@ namespace core
 				}
 				_polling.splice(_polling.end(), _querying);
 			}
+			return false;
 		}
 
 
