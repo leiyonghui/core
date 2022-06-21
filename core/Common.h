@@ -36,7 +36,7 @@ namespace core
 		}
 
 	private:
-		std::function<void()> _func;
+		Func _func;
 	};
 
 	template<class Key, class Value, class Pr>

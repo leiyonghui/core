@@ -30,10 +30,12 @@
     <ClInclude Include="Queue.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="SkipList.h" />
+    <ClInclude Include="SyncQueue.h" />
     <ClInclude Include="TimeHelp.h" />
     <ClInclude Include="Timers.h" />
     <ClInclude Include="TimerSet.h" />
     <ClInclude Include="TimerWheel.h" />
+    <ClInclude Include="IntrusiveNode.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TimeHelp.cpp" />
