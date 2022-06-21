@@ -42,7 +42,7 @@ namespace core
 			if (_needStop)
 				return;
 
-
+			list.splice(list.end(), _list, _list.begin(), advance(_list.begin(), _list.end(), maxnum));
 			_notFull.notify_one();
 		}
 
@@ -92,6 +92,7 @@ namespace core
 			}
 			if (_needStop)
 				return;
+
 			_list.push_back(std::forward<F>(value));
 			_notEmpty.notify_one();
 		}
@@ -101,17 +102,17 @@ namespace core
 			if (_maxSize < 0)
 				return false;
 			auto isFull = _list.size() >= _maxSize;
-			if (isFull)
-				std::cout << "wait full" << std::endl;
-			return isFull;
+			/*if (isFull)
+				std::cout << "wait full" << std::endl;*/
+			return !isFull;
 		}
 
 		bool notEmpty()
 		{
 			auto isEmpty = _list.empty();
-			if (isEmpty)
-				std::cout << "wait not empty" << std::endl;
-			return isEmpty;
+			//if (isEmpty)
+				//std::cout << "wait not empty" << std::endl;
+			return !isEmpty;
 		}
 
 		template<typename Iter>

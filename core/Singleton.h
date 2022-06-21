@@ -1,4 +1,6 @@
 #pragma once
+#include <functional>
+#include <assert.h>
 
 namespace core
 {
@@ -9,9 +11,7 @@ namespace core
 		inline static T* Instance()
 		{
 			if (_instance == nullptr)
-			{
-				_instance = new T;
-			}
+				assert(false);
 			return _instance;
 		}
 

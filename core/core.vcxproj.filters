@@ -18,12 +18,15 @@
     <ClInclude Include="SkipList.h" />
     <ClInclude Include="IntrusiveNode.h" />
     <ClInclude Include="SyncQueue.h" />
+    <ClInclude Include="Loger.h" />
+    <ClInclude Include="Types.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TimeHelp.cpp" />
     <ClCompile Include="Timers.cpp" />
     <ClCompile Include="TimerSet.cpp" />
     <ClCompile Include="TimerWheel.cpp" />
+    <ClCompile Include="Loger.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="CMakeLists.txt" />
