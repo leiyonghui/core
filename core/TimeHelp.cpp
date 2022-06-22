@@ -85,7 +85,7 @@ namespace core
 			{
 				std::stringstream os;
 				os << "key:" << key.c_str() << " time:" << _maxTicks[key] << " ave time:" << _aveTime[key];
-				std::cout << TimeHelp::TimeToString(TimeHelp::now()) << " " << os.str() << endl;
+				std::cout << TimeHelp::TimeToString(TimeHelp::now_time()) << " " << os.str() << endl;
 			}
 
 		}

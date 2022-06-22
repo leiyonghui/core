@@ -27,7 +27,7 @@ namespace core
 
 		static int GetSecond(time_t t);
 
-		static time_t now() {
+		static time_t now_time() {
 #if 0
 			return time(NULL);//返回保有从纪元开始至今秒数的整数类型值
 #else
