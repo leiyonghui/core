@@ -45,7 +45,7 @@ namespace core
 		return std::localtime(&t)->tm_sec;
 	}
 
-	TimeInfo TimeHelp::GetTimeInfo(int64 seconds)
+	TimeInfo TimeHelp::GetTimeInfo(time_t seconds)
 	{
 		TimeInfo info;
 		auto tm = std::localtime(&seconds);

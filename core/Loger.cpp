@@ -121,7 +121,7 @@ namespace core
 		str.push_back('\n');
 		if (_timed)
 		{
-			int32 outIdx = ti.yday % _outs.size();
+			int32 outIdx = int32(ti.yday % _outs.size());
 			std::pair<int32, std::ofstream*>& out = _outs[outIdx];
 			if (out.first != ti.yday && out.second != NULL)
 			{
@@ -155,6 +155,22 @@ namespace core
 			if (_console)
 			{
 				fwrite(str.c_str(), 1, str.length(), stdout);
+			}
+		}
+	}
+
+	void FileLogAppender::stop()
+	{
+		ConsoleLogAppender::stop();
+
+		for (auto& iter : _outs)
+		{
+			if (iter.second)
+			{
+				iter.second->flush();
+				iter.second->close();
+				delete iter.second;
+				iter.second = nullptr;
 			}
 		}
 	}

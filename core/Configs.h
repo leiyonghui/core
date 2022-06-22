@@ -33,19 +33,7 @@ namespace core
 
 	void SetStacktrace(const std::function<std::string(int32 idx, int32 num, const std::string& prefix)>& func);
 
-#ifdef _WIN32
-#include <process.h>
-	inline int GetPid()
-	{
-		return ::_getpid();
-	}
-#endif
-#ifdef __linux
-	inline int GetPid()
-	{
-		return ::getpid();
-	}
-#endif
+	int GetPid();
 }
 
 

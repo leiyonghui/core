@@ -12,13 +12,13 @@ namespace core
 {
 	struct TimeInfo
 	{
-		uint8 sec;	//[0,59]
-		uint8 min;	//[0,59]
-		uint8 hour; //[0,23]
-		uint8 day;  //[1,31]
-		uint8 mon;  //[0, 11] from January
-		uint8 year; //[0,137] from 1900
-		uint8 yday;
+		uint32 sec;	//[0,59]
+		uint32 min;	//[0,59]
+		uint32 hour; //[0,23]
+		uint32 day;  //[1,31]
+		uint32 mon;  //[0, 11] from January
+		uint32 year; //[0,137] from 1900
+		uint32 yday;
 	};
 
 	class TimeHelp
@@ -39,7 +39,7 @@ namespace core
 
 		static int GetSecond(const time_t& t);
 
-		static TimeInfo GetTimeInfo(int64 seconds);
+		static TimeInfo GetTimeInfo(time_t seconds);
 
 		static TimeInfo GetTimeInfo(const system_clock::time_point& time)
 		{
@@ -47,7 +47,7 @@ namespace core
 			return GetTimeInfo(seconds);
 		}
 
-		static tm* GetTimeTM(int64 seconds)
+		static tm* GetTimeTM(const time_t seconds)
 		{
 			return std::localtime(&seconds);
 		}

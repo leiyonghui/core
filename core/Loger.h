@@ -88,6 +88,8 @@ namespace core
 
         void appender(const LogMsg& msg) override;
 
+        void stop() override;
+
     protected:
 		std::string _filename;
 		bool _timed;
@@ -114,6 +116,8 @@ namespace core
         void warning(const std::ostringstream& log);
 
         void error(const std::ostringstream& log);
+
+        void stop() { _logAppender->stop(); }
 
     protected:
         LogAppender* _logAppender;

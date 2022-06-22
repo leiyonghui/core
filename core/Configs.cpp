@@ -1,5 +1,13 @@
 #include "Configs.h"
 
+#ifdef _WIN32
+#include <process.h>
+
+#endif
+#ifdef __linux
+#include <unistd.h>
+#endif // __Liunx
+
 namespace core
 {
 	using StacktraceFunc = std::function<std::string(int32 idx, int32 num, const std::string& prefix)>;
@@ -13,5 +21,10 @@ namespace core
 	void SetStacktrace(const std::function<std::string(int32 idx, int32 num, const std::string& prefix)>& func)
 	{
 		__stacktrace = func;
+	}
+
+	int GetPid()
+	{
+		return getpid();
 	}
 }
