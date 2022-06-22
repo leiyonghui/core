@@ -45,6 +45,20 @@ namespace core
 		return std::localtime(&t)->tm_sec;
 	}
 
+	TimeInfo TimeHelp::GetTimeInfo(int64 seconds)
+	{
+		TimeInfo info;
+		auto tm = std::localtime(&seconds);
+		info.sec = tm->tm_sec;
+		info.min = tm->tm_min;
+		info.hour = tm->tm_hour;
+		info.day = tm->tm_mday;
+		info.mon = tm->tm_mon;
+		info.year = tm->tm_year;
+		info.yday = tm->tm_yday;
+		return info;
+	}
+
 	string TimeHelp::TimeToString(const time_t& t)
 	{
 		if (t > 0)
