@@ -1,5 +1,6 @@
 #pragma once
 #include "Configs.h"
+#include <condition_variable>
 
 namespace core
 {
@@ -77,7 +78,7 @@ namespace core
 			if (_maxSize < 0)
 				return false;
 			std::lock_guard<std::mutex> locker(_mutex);
-			return _list.size() >= _maxSize;
+			return _list.size() >= (size_t)_maxSize;
 		}
 
 	private:
@@ -101,7 +102,7 @@ namespace core
 		{
 			if (_maxSize < 0)
 				return false;
-			auto isFull = _list.size() >= _maxSize;
+			auto isFull = _list.size() >= (size_t)_maxSize;
 			/*if (isFull)
 				std::cout << "wait full" << std::endl;*/
 			return !isFull;
