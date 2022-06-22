@@ -36,3 +36,5 @@ typeof(Y) y_ = (Y); \
 
 #define DYNAMIC_CAST(CLASS, VALUE) std::dynamic_pointer_cast<CALSS>(VALUE)
 #define STATIC_CAST(CLASS, VALUE) std::static_pointer_cast<CLASS>(CALUE)
+
+#define SHARED_THIS(CLASS) std::static_pointer_cast<CLASS>(shared_from_this())

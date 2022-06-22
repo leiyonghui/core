@@ -43,10 +43,10 @@ namespace core
 		static void showInfo()
 		{
 			auto& objectPoolMap = getObjectPool();
-			core_log_trace("ObjectPoolInfo start:");
+			core_log_trace("[=ObjectPoolInfo start:=]");
 			for (const auto& iter : objectPoolMap)
 				iter.second();
-			core_log_trace("ObjectPoolInfo end.");
+			core_log_trace("[=ObjectPoolInfo end.=]");
 		}
 	};
 
@@ -89,7 +89,7 @@ namespace core
 
 		void printInfo()
 		{
-			core_log_info(typeid(T).name(), "using:", getUseCount(), "free:", getFreeCount());
+			core_log_trace(typeid(T).name(), "using:", getUseCount(), "free:", getFreeCount());
 		}
 
 		int32 getUseCount() const { return _useCount; }

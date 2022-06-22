@@ -1,4 +1,6 @@
 #pragma once
+#include <functional>
+#include <assert.h>
 
 namespace core
 {
@@ -9,17 +11,25 @@ namespace core
 		inline static T* Instance()
 		{
 			if (_instance == nullptr)
-			{
-				_instance = new T;
-			}
+				assert(false);
 			return _instance;
 		}
 
 		inline static T* Instance(T* instance)
 		{
-			T* old = _instance;
+			if (_instance) 
+				delete _instance;
 			_instance = instance;
-			return old;
+			return _instance;
+		}
+
+		template<class ...Args>
+		inline static T* Instance(Args&&...args)
+		{
+			if (_instance)
+				delete _instance;
+			_instance = new T(std::forward<Args>(args)...);
+			return _instance;
 		}
 
 	private:

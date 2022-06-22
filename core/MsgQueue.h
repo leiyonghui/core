@@ -1,6 +1,5 @@
 #pragma once
 #include "Configs.h"
-#include "NonCopyable.h"
 #include "Queue.h"
 
 namespace core

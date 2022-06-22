@@ -22,6 +22,7 @@
     <ClInclude Include="Common.h" />
     <ClInclude Include="Configs.h" />
     <ClInclude Include="FastNode.h" />
+    <ClInclude Include="Loger.h" />
     <ClInclude Include="Macro.h" />
     <ClInclude Include="KeyPool.h" />
     <ClInclude Include="MsgQueue.h" />
@@ -30,12 +31,17 @@
     <ClInclude Include="Queue.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="SkipList.h" />
+    <ClInclude Include="SyncQueue.h" />
     <ClInclude Include="TimeHelp.h" />
     <ClInclude Include="Timers.h" />
     <ClInclude Include="TimerSet.h" />
     <ClInclude Include="TimerWheel.h" />
+    <ClInclude Include="IntrusiveNode.h" />
+    <ClInclude Include="Types.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Configs.cpp" />
+    <ClCompile Include="Loger.cpp" />
     <ClCompile Include="TimeHelp.cpp" />
     <ClCompile Include="Timers.cpp" />
     <ClCompile Include="TimerSet.cpp" />
