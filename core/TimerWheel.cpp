@@ -59,7 +59,7 @@ namespace core
 						{
 							if (event->_count)
 								event->_count--;
-							event->_tick += event->_period;
+							event->_tick = _curTick + event->_period;
 							_addTimer(event);
 						}
 						else
