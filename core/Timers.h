@@ -92,18 +92,13 @@ namespace core
 		TimerHander(const TimerHander&) = delete;
 		TimerHander operator=(const TimerHander&) = delete;
 	public:
-		TimerHander(IScheduler* scheduler) : _nextId(0), _scheduler(scheduler) {}
+		TimerHander(IScheduler* scheduler) : _nextId(0), _scheduler(scheduler) { ; }
 
-		virtual ~TimerHander()
-		{
-			cancel();
-		}
+		int64 addTimer(Tick delay, Tick duration, int32 times, TimeoutCallback&& callback);
 
-		int64 addTimer(Tick delay, Tick duration, int32 count, TimeoutCallback&& callback);
+		int64 addTimer(const Duration& delay, const Duration& duration, int32 times, TimeoutCallback&& callback);
 
-		int64 addTimer(const Duration& delay, const Duration& duration, int32 count, TimeoutCallback&& callback);
-
-		int64 addTimer(const Datetime& time, const Duration& duration, int32 count, TimeoutCallback&& callback);
+		int64 addTimer(const Datetime& time, const Duration& duration, int32 times, TimeoutCallback&& callback);
 
 		int64 addTimer(const Duration& delay, const Duration& duration, TimeoutCallback&& callback);
 

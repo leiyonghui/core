@@ -12,26 +12,31 @@ namespace core
 			assert(_hander->_timerMap.erase(_id));
 	}
 
-	int64 TimerHander::addTimer(Tick delay, Tick duration, int32 count, TimeoutCallback&& callback)
+	TimerHander::~TimerHander()
+	{
+		cancel();
+	}
+
+	int64 TimerHander::addTimer(Tick delay, Tick duration, int32 times, TimeoutCallback&& callback)
 	{
 		if (_scheduler == nullptr)
 			return 0;
 		int64 id = nextId();
-		TimerEvent* event = new TimerEvent(id, this, delay, duration, count, std::forward<TimeoutCallback>(callback));
+		TimerEvent* event = new TimerEvent(id, this, delay, duration, times, std::forward<TimeoutCallback>(callback));
 		event->_invalid = false;
 		_scheduler->addTimer(event);
 		_timerMap[id] = event;
 		return id;
 	}
 
-	int64 TimerHander::addTimer(const Duration& delay, const Duration& duration, int32 count, TimeoutCallback&& callback)
+	int64 TimerHander::addTimer(const Duration& delay, const Duration& duration, int32 times, TimeoutCallback&& callback)
 	{
-		return addTimer(TimeHelp::clock_ms().count() + delay.count(), duration.count(), count, std::forward<TimeoutCallback>(callback));
+		return addTimer(TimeHelp::clock().count() + delay.count(), duration.count(), times, std::forward<TimeoutCallback>(callback));
 	}
 
-	int64 TimerHander::addTimer(const Datetime& datetime, const Duration& duration, int32 count, TimeoutCallback&& callback)
+	int64 TimerHander::addTimer(const Datetime& datetime, const Duration& duration, int32 times, TimeoutCallback&& callback)
 	{
-		return addTimer(chrono::duration_cast<Duration>(datetime - chrono::system_clock::now()), duration, count, std::forward<TimeoutCallback>(callback));
+		return addTimer(chrono::duration_cast<Duration>(datetime - TimeHelp::now()), duration, times, std::forward<TimeoutCallback>(callback));
 	}
 
 	int64 TimerHander::addTimer(const Duration& delay, const Duration& duration, TimeoutCallback&& callback)

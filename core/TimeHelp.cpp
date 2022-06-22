@@ -16,12 +16,17 @@ namespace core
 		START_CLOCK = steady_clock::now();
 	}
 
+	void TimeHelp::SetOffest(const std::chrono::milliseconds& ms)
+	{
+		OFFEST_MILLI = ms;
+	}
+
 	int TimeHelp::GetYear(const time_t& t) {
 		return std::localtime(&t)->tm_year;
 	}
 
 	int TimeHelp::GetMonth(const time_t& t) {
-		return std::localtime(const time_t& t)->tm_mon;
+		return std::localtime(&t)->tm_mon;
 	}
 
 	int TimeHelp::GetDay(const time_t& t) {

@@ -65,6 +65,8 @@ namespace core
 
 		static void StartUp();
 
+		static void SetOffest(const std::chrono::milliseconds& ms);
+
 	private:
 		static std::chrono::time_point<steady_clock> START_CLOCK;
 		static std::chrono::milliseconds OFFEST_MILLI;
