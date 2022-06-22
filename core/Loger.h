@@ -82,17 +82,18 @@ namespace core
     class FileLogAppender : public ConsoleLogAppender
     {
     public:
-        FileLogAppender(const std::string& fileName, bool console):ConsoleLogAppender(), _fileName(fileName), _timed(false), _console(console)
-        {
-            
-        }
+        FileLogAppender(const std::string& filename, bool console);
+
+        ~FileLogAppender();
 
         void appender(const LogMsg& msg) override;
 
     protected:
-		std::string _fileName;
+		std::string _filename;
 		bool _timed;
 		bool _console;
+		int _pid;
+		std::vector<std::pair<int32, std::ofstream*> > _outs;
     };
 
     class Logger : public CSingleton<Logger>, public CNoncopyable
@@ -119,18 +120,18 @@ namespace core
     };
    
 	template<class ...Args>
-	inline std::ostringstream printf_log(const std::string& time, const char* file, int line, const Args& ...args)
+	inline std::ostringstream printf_log(/*const std::string& time, */const char* file, int line, const Args& ...args)
 	{
         std::ostringstream oss;
-        oss << time << " " << file << ":" << line;
+        oss /*<< time << " " */<< file << ":" << line;
 		((oss << " " << args), ...);
         return oss;
 	}
 
     const char* get_short_file(const char* file, size_t size);
 
-#define core_log_trace(...) core::Logger::Instance()->trace(printf_log(TimeHelp::TimeToString(time(NULL)), get_short_file(__FILE__, sizeof(__FILE__)), __LINE__, ## __VA_ARGS__))
-#define core_log_error(...) core::Logger::Instance()->error(printf_log(TimeHelp::TimeToString(time(NULL)), get_short_file(__FILE__, sizeof(__FILE__)), __LINE__, "ERROR", ## __VA_ARGS__))
-#define core_log_warning(...) core::Logger::Instance()->warning(printf_log(TimeHelp::TimeToString(time(NULL)), get_short_file(__FILE__, sizeof(__FILE__)), __LINE__, "WARNING", ## __VA_ARGS__))
-#define core_log_debug(...) core::Logger::Instance()->debug(printf_log(TimeHelp::TimeToString(time(NULL)), get_short_file(__FILE__, sizeof(__FILE__)), __LINE__, "DEBUG", ## __VA_ARGS__))
+#define core_log_trace(...) core::Logger::Instance()->trace(printf_log(/*TimeHelp::TimeToString(time(NULL)), */get_short_file(__FILE__, sizeof(__FILE__)), __LINE__, ## __VA_ARGS__))
+#define core_log_error(...) core::Logger::Instance()->error(printf_log(/*TimeHelp::TimeToString(time(NULL)), */get_short_file(__FILE__, sizeof(__FILE__)), __LINE__, ## __VA_ARGS__))
+#define core_log_warning(...) core::Logger::Instance()->warning(printf_log(/*TimeHelp::TimeToString(time(NULL)), */get_short_file(__FILE__, sizeof(__FILE__)), __LINE__, ## __VA_ARGS__))
+#define core_log_debug(...) core::Logger::Instance()->debug(printf_log(/*TimeHelp::TimeToString(time(NULL)), */get_short_file(__FILE__, sizeof(__FILE__)), __LINE__, ## __VA_ARGS__))
 };

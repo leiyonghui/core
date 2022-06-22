@@ -5,10 +5,22 @@
 #include <iomanip>
 #include <string>
 #include <map>
+#include "Types.h"
 
 using namespace std::literals::chrono_literals;
 namespace core
 {
+	struct TimeInfo
+	{
+		uint8 sec;	//[0,59]
+		uint8 min;	//[0,59]
+		uint8 hour; //[0,23]
+		uint8 day;  //[1,31]
+		uint8 mon;  //[0, 11] from January
+		uint8 year; //[0,137] from 1900
+		uint8 yday;
+	};
+
 	class TimeHelp
 	{
 	public:
@@ -26,6 +38,19 @@ namespace core
 		static int GetMinute(const time_t& t);
 
 		static int GetSecond(const time_t& t);
+
+		static TimeInfo GetTimeInfo(int64 seconds);
+
+		static TimeInfo GetTimeInfo(const system_clock::time_point& time)
+		{
+			auto seconds = std::chrono::duration_cast<std::chrono::milliseconds>(time.time_since_epoch()).count();
+			return GetTimeInfo(seconds);
+		}
+
+		static tm* GetTimeTM(int64 seconds)
+		{
+			return std::localtime(&seconds);
+		}
 
 		static time_t now_time() {
 #if 0
