@@ -9,37 +9,38 @@ namespace core
 	using steady_clock = std::chrono::steady_clock;
 
 	std::chrono::time_point<steady_clock> TimeHelp::START_CLOCK = steady_clock::now();
+	std::chrono::milliseconds TimeHelp::OFFEST_MILLI = std::chrono::milliseconds::zero();
 
 	void TimeHelp::StartUp()
 	{
 		START_CLOCK = steady_clock::now();
 	}
 
-	int TimeHelp::GetYear(time_t t) {
+	int TimeHelp::GetYear(const time_t& t) {
 		return std::localtime(&t)->tm_year;
 	}
 
-	int TimeHelp::GetMonth(time_t t) {
-		return std::localtime(&t)->tm_mon;
+	int TimeHelp::GetMonth(const time_t& t) {
+		return std::localtime(const time_t& t)->tm_mon;
 	}
 
-	int TimeHelp::GetDay(time_t t) {
+	int TimeHelp::GetDay(const time_t& t) {
 		return std::localtime(&t)->tm_mday;
 	}
 
-	int TimeHelp::GetHour(time_t t) {
+	int TimeHelp::GetHour(const time_t& t) {
 		return std::localtime(&t)->tm_hour;
 	}
 
-	int TimeHelp::GetMinute(time_t t) {
+	int TimeHelp::GetMinute(const time_t& t) {
 		return std::localtime(&t)->tm_min;
 	}
 
-	int TimeHelp::GetSecond(time_t t) {
+	int TimeHelp::GetSecond(const time_t& t) {
 		return std::localtime(&t)->tm_sec;
 	}
 
-	string TimeHelp::TimeToString(time_t t)
+	string TimeHelp::TimeToString(const time_t& t)
 	{
 		if (t > 0)
 		{
