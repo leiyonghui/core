@@ -33,6 +33,7 @@
     <ClInclude Include="SkipList.h" />
     <ClInclude Include="SyncQueue.h" />
     <ClInclude Include="TimeHelp.h" />
+    <ClInclude Include="TimerImpl.h" />
     <ClInclude Include="Timers.h" />
     <ClInclude Include="TimerSet.h" />
     <ClInclude Include="TimerWheel.h" />

@@ -20,6 +20,7 @@
     <ClInclude Include="SyncQueue.h" />
     <ClInclude Include="Loger.h" />
     <ClInclude Include="Types.h" />
+    <ClInclude Include="TimerImpl.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TimeHelp.cpp" />

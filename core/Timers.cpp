@@ -49,6 +49,11 @@ namespace core
 		return addTimer(time, duration, 1, std::forward<TimeoutCallback>(callback));
 	}
 
+	bool TimerHander::hasTimer(int64 id)
+	{
+		return _timerMap.find(id) != _timerMap.end();
+	}
+
 	bool TimerHander::cancel(int64 id)
 	{
 		if (_scheduler == nullptr)
