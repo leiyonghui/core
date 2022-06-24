@@ -41,12 +41,12 @@ namespace core
 
 	int64 TimerHander::addTimer(const Duration& delay, const Duration& duration, TimeoutCallback&& callback)
 	{
-		return addTimer(delay, duration, 1, std::forward<TimeoutCallback>(callback));
+		return addTimer(delay, duration, 0, std::forward<TimeoutCallback>(callback));
 	}
 
 	int64 TimerHander::addTimer(const Datetime& time, const Duration& duration, TimeoutCallback&& callback)
 	{
-		return addTimer(time, duration, 1, std::forward<TimeoutCallback>(callback));
+		return addTimer(time, duration, 0, std::forward<TimeoutCallback>(callback));
 	}
 
 	bool TimerHander::hasTimer(int64 id)
@@ -78,6 +78,7 @@ namespace core
 		{
 			iter->second->_hander = nullptr;
 			_scheduler->delTimer(iter->second);
+			iter = _timerMap.erase(iter);
 		}
 		_timerMap.clear();
 	}
