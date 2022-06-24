@@ -20,10 +20,10 @@ namespace core
 
 		int64 startTimer(const Duration& delay, const Duration& duration, TimeoutCallback&& callback)
 		{
-			//point不能在外面，否则延长生命周期
-			return addTimer(delay, duration, [callback, this]() {
-				T* ptr = dynamic_cast<T*>(this);
-				auto weak = ptr->weak_from_this();
+			//point不能用shared，否则延长生命周期
+			T* ptr = dynamic_cast<T*>(this);
+			auto weak = ptr->weak_from_this();
+			return addTimer(delay, duration, [callback, weak]() {
 				if (!weak.expired())
 				{
 					callback(std::shared_ptr<T>(weak));
@@ -33,9 +33,9 @@ namespace core
 
 		int64 startTimer(const Datetime& time, const Duration& duration, TimeoutCallback&& callback)
 		{
-			return addTimer(time, duration, [callback, this]() {
-				T* ptr = dynamic_cast<T*>(this);
-				auto weak = ptr->weak_from_this();
+			T* ptr = dynamic_cast<T*>(this);
+			auto weak = ptr->weak_from_this();
+			return addTimer(time, duration, [callback, weak]() {
 				if (!weak.expired())
 				{
 					callback(std::shared_ptr<T>(weak));

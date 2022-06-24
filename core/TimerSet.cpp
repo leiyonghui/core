@@ -90,9 +90,12 @@ namespace core
 
 		void TimerSetImpl::_delTimer(TimerEvent* event)
 		{
-			event->leave();
-			event->_invalid = true;
-			_invalidEvents.push_back(event);
+			if (!event->_invalid) 
+			{
+				event->leave();
+				event->_invalid = true;
+				_invalidEvents.push_back(event);
+			}
 		}
 
 		void TimerSetImpl::_onTimeout(TimerEvent* event)

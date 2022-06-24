@@ -51,7 +51,8 @@ namespace core
 
 	bool TimerHander::hasTimer(int64 id)
 	{
-		return _timerMap.find(id) != _timerMap.end();
+		auto iter = _timerMap.find(id);
+		return  iter != _timerMap.end() && !iter->second->_invalid;
 	}
 
 	bool TimerHander::cancel(int64 id)
