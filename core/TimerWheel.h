@@ -13,14 +13,6 @@ namespace core
 
 		class TimerWheel : public IScheduler
 		{
-			Tick _curTick;
-			Tick _interval;
-			Tick _remainder;
-			Tick _lasttime;
-			uint64 _expend;
-			uint64 _executeCount;
-			TimerSlot _slot[SLOT_SIZE][WHEEL_SIZE];
-			std::list<TimerEvent*> _invalidEvents;
 		public:
 			TimerWheel(Tick interval = 1);
 
@@ -46,6 +38,16 @@ namespace core
 			void _updateSlot(int32 i);
 
 			void _update();
+
+		protected:
+			Tick _curTick;
+			Tick _interval;
+			Tick _remainder;
+			Tick _lasttime;
+			uint64 _expend;
+			uint64 _executeCount;
+			TimerSlot _slot[SLOT_SIZE][WHEEL_SIZE];
+			std::list<TimerEvent*> _invalidEvents;
 		};
 	}
 }

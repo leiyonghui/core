@@ -16,7 +16,6 @@ namespace core
 	};
 	namespace timerset {
 		class TimerSet;
-		class TimerSetImpl;
 	};
 	class IScheduler;
 	class TimerHander;
@@ -26,7 +25,7 @@ namespace core
 		friend class IScheduler;
 		friend class TimerHander;
 		friend class timerwheel::TimerWheel;
-		friend class timerset::TimerSetImpl;
+		friend class timerset::TimerSet;
 
 		int64 _id;
 		TimerHander* _hander;
@@ -65,7 +64,7 @@ namespace core
 
 	class TimerSlot
 	{
-		friend class timerset::TimerSetImpl;
+		friend class timerset::TimerSet;
 		friend class timerwheel::TimerWheel;
 
 		CFastNode<TimerEvent*> _slot;
@@ -110,7 +109,7 @@ namespace core
 	protected:
 		friend class TimerEvent;
 		friend class timerwheel::TimerWheel;
-		friend class timerset::TimerSetImpl;
+		friend class timerset::TimerSet;
 
 		int64 _nextId;
 		std::map<int64, TimerEvent*> _timerMap;
@@ -121,9 +120,8 @@ namespace core
 	class IScheduler//implement timerwheel or heap
 	{
 	public:
-		IScheduler() {}
-
-		virtual ~IScheduler() {}
+		IScheduler() = default;
+		virtual ~IScheduler() = default;
 
 		virtual Tick tick() = 0;
 

@@ -42,5 +42,10 @@ namespace core
 				}
 			});
 		}
+
+		bool stopTimer(int64 id)
+		{
+			return cancel(id);
+		}
 	};
 }
