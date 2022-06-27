@@ -6,36 +6,7 @@ namespace core
 {
 	namespace timerset
 	{
-		TimerSet::TimerSet() :_timer(new TimerSetImpl()) {
-
-		}
-
 		TimerSet::~TimerSet()
-		{
-			delete _timer;
-		}
-
-		Tick TimerSet::tick()
-		{
-			return _timer->_curTick;
-		}
-
-		void TimerSet::update(Tick now)
-		{
-			_timer->_update(now);
-		}
-
-		void TimerSet::addTimer(TimerEvent* event)
-		{
-			_timer->_addTimer(event);
-		}
-
-		void TimerSet::delTimer(TimerEvent* event)
-		{
-			_timer->_delTimer(event);
-		}
-
-		TimerSetImpl::~TimerSetImpl()
 		{
 			while (!_invalidEvents.empty())
 			{
@@ -44,7 +15,7 @@ namespace core
 			}
 		}
 
-		void TimerSetImpl::_update(Tick now)
+		void TimerSet::update(Tick now)
 		{
 			_curTick = now;
 			while (!_queue.empty())
@@ -63,7 +34,7 @@ namespace core
 						assert(event->tick() == top->first);
 						iter = iter->next();
 						event->leave();
-						_onTimeout(event);
+						onTimeout(event);
 					}
 				}
 				assert(slot.empty());
@@ -77,9 +48,10 @@ namespace core
 			}
 		}
 
-		void TimerSetImpl::_addTimer(TimerEvent* event)
+		void TimerSet::addTimer(TimerEvent* event)
 		{
 			auto tick = event->tick();
+			assert(!event->_invalid);
 			auto iter = _queue.find(tick);
 			if (iter == _queue.end())
 			{
@@ -88,14 +60,17 @@ namespace core
 			iter->second->_slot.pushBack(*event);
 		}
 
-		void TimerSetImpl::_delTimer(TimerEvent* event)
+		void TimerSet::delTimer(TimerEvent* event)
 		{
-			event->leave();
-			event->_invalid = true;
-			_invalidEvents.push_back(event);
+			if (!event->_invalid) 
+			{
+				event->leave();
+				event->_invalid = true;
+				_invalidEvents.push_back(event);
+			}
 		}
 
-		void TimerSetImpl::_onTimeout(TimerEvent* event)
+		void TimerSet::onTimeout(TimerEvent* event)
 		{
 			assert(event->_tick <= _curTick);
 			try
@@ -110,19 +85,21 @@ namespace core
 							if (event->_count)
 								event->_count--;
 							event->_tick = _curTick + event->_period;
-							_addTimer(event);
+							addTimer(event);
 						}
 						else
 						{
-							//_delTimer(event);
 							delete event;
 						}
 					}
 				}
+				else
+				{
+					assert(false);
+				}
 			}
 			catch (std::exception e)
 			{
-				//_delTimer(event);
 				delete event;
 			}
 		}

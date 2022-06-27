@@ -16,7 +16,6 @@ namespace core
 	};
 	namespace timerset {
 		class TimerSet;
-		class TimerSetImpl;
 	};
 	class IScheduler;
 	class TimerHander;
@@ -26,7 +25,7 @@ namespace core
 		friend class IScheduler;
 		friend class TimerHander;
 		friend class timerwheel::TimerWheel;
-		friend class timerset::TimerSetImpl;
+		friend class timerset::TimerSet;
 
 		int64 _id;
 		TimerHander* _hander;
@@ -65,7 +64,7 @@ namespace core
 
 	class TimerSlot
 	{
-		friend class timerset::TimerSetImpl;
+		friend class timerset::TimerSet;
 		friend class timerwheel::TimerWheel;
 
 		CFastNode<TimerEvent*> _slot;
@@ -78,20 +77,13 @@ namespace core
 
 	class TimerHander
 	{
-		friend class TimerEvent;
-		friend class timerwheel::TimerWheel;
-		friend class timerset::TimerSetImpl;
-
+	public:
 		using Duration = std::chrono::milliseconds;
 		using Datetime = std::chrono::system_clock::time_point;
 
-		int64 _nextId;
-		std::map<int64, TimerEvent*> _timerMap;
-		IScheduler* _scheduler;
-
-		TimerHander(const TimerHander&) = delete;
 		TimerHander operator=(const TimerHander&) = delete;
-	public:
+		TimerHander(const TimerHander&) = delete;
+
 		TimerHander(IScheduler* scheduler) : _nextId(0), _scheduler(scheduler) { ; }
 
 		virtual ~TimerHander();
@@ -106,20 +98,30 @@ namespace core
 
 		int64 addTimer(const Datetime& time, const Duration& duration, TimeoutCallback&& callback);
 
+		bool hasTimer(int64 id);
+
 		bool cancel(int64 id);
 
 		void cancel();
 
 		int64 nextId() {return ++_nextId;}
+
+	protected:
+		friend class TimerEvent;
+		friend class timerwheel::TimerWheel;
+		friend class timerset::TimerSet;
+
+		int64 _nextId;
+		std::map<int64, TimerEvent*> _timerMap;
+		IScheduler* _scheduler;
 	};
 
 
 	class IScheduler//implement timerwheel or heap
 	{
 	public:
-		IScheduler() {}
-
-		virtual ~IScheduler() {}
+		IScheduler() = default;
+		virtual ~IScheduler() = default;
 
 		virtual Tick tick() = 0;
 

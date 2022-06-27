@@ -14,15 +14,18 @@ namespace core
 		void TimerWheel::addTimer(TimerEvent* event)
 		{
 			Tick tick = event->_tick - _curTick;
-			assert(tick > 0);
+			assert(tick > 0 && !event->_invalid);
 			_addTimer(event);
 		}
 
 		void TimerWheel::delTimer(TimerEvent* event)
 		{
-			event->leave();
-			event->_invalid = true;
-			_invalidEvents.push_back(event);
+			if (!event->_invalid)
+			{
+				event->leave();
+				event->_invalid = true;
+				_invalidEvents.push_back(event);
+			}
 		}
 
 		void TimerWheel::update(Tick now)
@@ -67,6 +70,10 @@ namespace core
 							_delTimer(event);
 						}
 					}
+				}
+				else
+				{
+					assert(false);
 				}
 			}
 			catch (std::exception e)
