@@ -5,7 +5,7 @@
 namespace core
 {
 	template<class T>
-	class TimerImpl : protected TimerHander
+	class TimerImpl
 	{
 	public:
 		using Duration = std::chrono::milliseconds;
@@ -13,9 +13,16 @@ namespace core
 
 		using TimeoutCallback = std::function<void(std::shared_ptr<T>)>;
 
-		TimerImpl(IScheduler* scheduler): TimerHander(scheduler)
+		TimerImpl(IScheduler* scheduler = nullptr): _handler(std::make_unique<TimerHander>(scheduler))
 		{
 
+		}
+
+		virtual~TimerImpl() = default;
+
+		void setScheduler(IScheduler* scheduler)
+		{
+			_handler = std::make_unique<TimerHander>(scheduler);
 		}
 
 		int64 startTimer(const Duration& delay, const Duration& duration, TimeoutCallback&& callback)
@@ -23,7 +30,7 @@ namespace core
 			//point不能用shared，否则延长生命周期
 			T* ptr = dynamic_cast<T*>(this);
 			auto weak = ptr->weak_from_this();
-			return addTimer(delay, duration, [callback, weak]() {
+			return _handler->addTimer(delay, duration, [callback, weak]() {
 				if (!weak.expired())
 				{
 					callback(std::shared_ptr<T>(weak));
@@ -35,7 +42,7 @@ namespace core
 		{
 			T* ptr = dynamic_cast<T*>(this);
 			auto weak = ptr->weak_from_this();
-			return addTimer(time, duration, [callback, weak]() {
+			return _handler->addTimer(time, duration, [callback, weak]() {
 				if (!weak.expired())
 				{
 					callback(std::shared_ptr<T>(weak));
@@ -45,7 +52,15 @@ namespace core
 
 		bool stopTimer(int64 id)
 		{
-			return cancel(id);
+			return _handler->cancel(id);
 		}
+
+		void reset()
+		{
+			_handler = std::make_unique<TimerHander>(nullptr);
+		}
+
+	protected:
+		std::unique_ptr<TimerHander> _handler;
 	};
 }
