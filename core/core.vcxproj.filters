@@ -21,6 +21,7 @@
     <ClInclude Include="Loger.h" />
     <ClInclude Include="Types.h" />
     <ClInclude Include="TimerImpl.h" />
+    <ClInclude Include="ResourceMonitor.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TimeHelp.cpp" />

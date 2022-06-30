@@ -29,6 +29,7 @@
     <ClInclude Include="NonCopyable.h" />
     <ClInclude Include="ObjectPools.h" />
     <ClInclude Include="Queue.h" />
+    <ClInclude Include="ResourceMonitor.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="SkipList.h" />
     <ClInclude Include="SyncQueue.h" />
