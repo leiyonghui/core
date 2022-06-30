@@ -25,6 +25,13 @@ namespace core
 
 	int GetPid()
 	{
+#ifdef _WIN32
+		return _getpid();
+#endif // _WIN32
+#ifdef __linux
 		return getpid();
+#endif // __linux
+
+
 	}
 }
