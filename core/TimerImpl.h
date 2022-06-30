@@ -25,12 +25,12 @@ namespace core
 			_handler = std::make_unique<TimerHander>(scheduler);
 		}
 
-		int64 startTimer(const Duration& delay, const Duration& duration, TimeoutCallback&& callback)
+		int64 startTimer(int64 id, const Duration& delay, const Duration& duration, TimeoutCallback&& callback)
 		{
 			//point不能用shared，否则延长生命周期
 			T* ptr = dynamic_cast<T*>(this);
 			auto weak = ptr->weak_from_this();
-			return _handler->addTimer(delay, duration, [callback, weak]() {
+			return _handler->addTimer(id, delay, duration, [callback, weak]() {
 				if (!weak.expired())
 				{
 					callback(std::shared_ptr<T>(weak));
@@ -38,16 +38,26 @@ namespace core
 			});
 		}
 
-		int64 startTimer(const Datetime& time, const Duration& duration, TimeoutCallback&& callback)
+		int64 startTimer(int64 id, const Datetime& time, const Duration& duration, TimeoutCallback&& callback)
 		{
 			T* ptr = dynamic_cast<T*>(this);
 			auto weak = ptr->weak_from_this();
-			return _handler->addTimer(time, duration, [callback, weak]() {
+			return _handler->addTimer(id, time, duration, [callback, weak]() {
 				if (!weak.expired())
 				{
 					callback(std::shared_ptr<T>(weak));
 				}
 			});
+		}
+
+		int64 startTimer(const Duration& delay, const Duration& duration, TimeoutCallback&& callback)
+		{
+			return startTimer(0, delay, duration, std::move(callback))
+		}
+
+		int64 startTimer(const Datetime& time, const Duration& duration, TimeoutCallback&& callback)
+		{
+			return startTimer(0, time, duration, std::move(callback))
 		}
 
 		bool stopTimer(int64 id)
@@ -57,7 +67,7 @@ namespace core
 
 		void reset()
 		{
-			_handler = std::make_unique<TimerHander>(nullptr);
+			_handler.reset();
 		}
 
 	protected:

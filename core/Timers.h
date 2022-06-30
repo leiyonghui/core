@@ -88,15 +88,15 @@ namespace core
 
 		virtual ~TimerHander();
 
-		int64 addTimer(Tick delay, Tick duration, int32 times, TimeoutCallback&& callback);
+		int64 addTimer(int64 id, Tick delay, Tick duration, int32 times, TimeoutCallback&& callback);
 
-		int64 addTimer(const Duration& delay, const Duration& duration, int32 times, TimeoutCallback&& callback);
+		int64 addTimer(int64 id, const Duration& delay, const Duration& duration, int32 times, TimeoutCallback&& callback);
 
-		int64 addTimer(const Datetime& time, const Duration& duration, int32 times, TimeoutCallback&& callback);
+		int64 addTimer(int64 id, const Datetime& time, const Duration& duration, int32 times, TimeoutCallback&& callback);
 
-		int64 addTimer(const Duration& delay, const Duration& duration, TimeoutCallback&& callback);
+		int64 addTimer(int64 id, const Duration& delay, const Duration& duration, TimeoutCallback&& callback);
 
-		int64 addTimer(const Datetime& time, const Duration& duration, TimeoutCallback&& callback);
+		int64 addTimer(int64 id, const Datetime& time, const Duration& duration, TimeoutCallback&& callback);
 
 		bool hasTimer(int64 id);
 
@@ -104,7 +104,7 @@ namespace core
 
 		void cancel();
 
-		int64 nextId() {return ++_nextId;}
+		int64 nextId() {return --_nextId;}
 
 	protected:
 		friend class TimerEvent;
