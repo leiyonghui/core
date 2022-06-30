@@ -115,7 +115,9 @@ namespace core
 
         void warning(const std::ostringstream& log);
 
-        void error(const std::ostringstream& log);
+		void error(const std::ostringstream& log);
+
+		void info(const std::ostringstream& log);
 
         void stop() { _logAppender->stop(); }
 
@@ -138,4 +140,5 @@ namespace core
 #define core_log_error(...) core::Logger::Instance()->error(printf_log(/*TimeHelp::TimeToString(time(NULL)), */get_short_file(__FILE__, sizeof(__FILE__)), __LINE__, ## __VA_ARGS__))
 #define core_log_warning(...) core::Logger::Instance()->warning(printf_log(/*TimeHelp::TimeToString(time(NULL)), */get_short_file(__FILE__, sizeof(__FILE__)), __LINE__, ## __VA_ARGS__))
 #define core_log_debug(...) core::Logger::Instance()->debug(printf_log(/*TimeHelp::TimeToString(time(NULL)), */get_short_file(__FILE__, sizeof(__FILE__)), __LINE__, ## __VA_ARGS__))
+#define core_log_info(...) core::Logger::Instance()->info(printf_log(/*TimeHelp::TimeToString(time(NULL)), */"", "", ## __VA_ARGS__))
 };
