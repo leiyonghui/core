@@ -52,12 +52,12 @@ namespace core
 
 		int64 startTimer(const Duration& delay, const Duration& duration, TimeoutCallback&& callback)
 		{
-			return startTimer(0, delay, duration, std::move(callback))
+			return startTimer(0, delay, duration, std::move(callback));
 		}
 
 		int64 startTimer(const Datetime& time, const Duration& duration, TimeoutCallback&& callback)
 		{
-			return startTimer(0, time, duration, std::move(callback))
+			return startTimer(0, time, duration, std::move(callback));
 		}
 
 		bool stopTimer(int64 id)
