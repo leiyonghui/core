@@ -4,8 +4,8 @@
 namespace core
 {
 	static const char* __prefixs[] = {
-		"%d %02d:%02d:%02d.%03d ",
 		"%d %02d:%02d:%02d.%03d DEBUG ",
+		"%d %02d:%02d:%02d.%03d ",
 		"%d %02d:%02d:%02d.%03d WARNING ",
 		"%d %02d:%02d:%02d.%03d ERROR ",
 		"%d INFO "
