@@ -215,6 +215,14 @@ namespace core
 			_logAppender->push(std::move(msg));
 	}
 
+	void Logger::info(const std::ostringstream& log)
+	{
+		LogMsg msg;
+		msg.time = TimeHelp::now_milli().count();
+		msg.log = log.str();
+		_logAppender->push(std::move(msg));
+	}
+
 	const char* get_short_file(const char* file, size_t size)
 	{
 		for (auto i = int32(size) - 2; i >= 0; --i)
