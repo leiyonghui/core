@@ -18,6 +18,7 @@ namespace core
 		Trace,
 		Warning,
 		Error,
+        Info
 	};
 
     class LogAppender
@@ -126,19 +127,21 @@ namespace core
     };
    
 	template<class ...Args>
-	inline std::ostringstream printf_log(/*const std::string& time, */const char* file, int line, const Args& ...args)
+	std::ostringstream printf_log(const char* file, int line, const Args& ...args)
 	{
         std::ostringstream oss;
-        oss /*<< time << " " */<< file << ":" << line;
+        oss << file;
+        if (line)
+            oss<< ":" << line;
 		((oss << " " << args), ...);
         return oss;
 	}
 
     const char* get_short_file(const char* file, size_t size);
 
-#define core_log_trace(...) core::Logger::Instance()->trace(printf_log(/*TimeHelp::TimeToString(time(NULL)), */get_short_file(__FILE__, sizeof(__FILE__)), __LINE__, ## __VA_ARGS__))
-#define core_log_error(...) core::Logger::Instance()->error(printf_log(/*TimeHelp::TimeToString(time(NULL)), */get_short_file(__FILE__, sizeof(__FILE__)), __LINE__, ## __VA_ARGS__))
-#define core_log_warning(...) core::Logger::Instance()->warning(printf_log(/*TimeHelp::TimeToString(time(NULL)), */get_short_file(__FILE__, sizeof(__FILE__)), __LINE__, ## __VA_ARGS__))
-#define core_log_debug(...) core::Logger::Instance()->debug(printf_log(/*TimeHelp::TimeToString(time(NULL)), */get_short_file(__FILE__, sizeof(__FILE__)), __LINE__, ## __VA_ARGS__))
-#define core_log_info(...) core::Logger::Instance()->info(printf_log(/*TimeHelp::TimeToString(time(NULL)), */"", "", ## __VA_ARGS__))
+#define core_log_trace(...) core::Logger::Instance()->trace(printf_log(get_short_file(__FILE__, sizeof(__FILE__)), __LINE__, ## __VA_ARGS__))
+#define core_log_error(...) core::Logger::Instance()->error(printf_log(get_short_file(__FILE__, sizeof(__FILE__)), __LINE__, ## __VA_ARGS__))
+#define core_log_warning(...) core::Logger::Instance()->warning(printf_log(get_short_file(__FILE__, sizeof(__FILE__)), __LINE__, ## __VA_ARGS__))
+#define core_log_debug(...) core::Logger::Instance()->debug(printf_log(get_short_file(__FILE__, sizeof(__FILE__)), __LINE__, ## __VA_ARGS__))
+#define core_log_info(...) core::Logger::Instance()->info(printf_log("", 0, ## __VA_ARGS__))
 };

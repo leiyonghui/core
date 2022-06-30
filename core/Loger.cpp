@@ -8,6 +8,7 @@ namespace core
 		"%d %02d:%02d:%02d.%03d DEBUG ",
 		"%d %02d:%02d:%02d.%03d WARNING ",
 		"%d %02d:%02d:%02d.%03d ERROR ",
+		"%d INFO "
 	};
 
 	LogAppender::LogAppender():_level(Debug)
@@ -107,7 +108,6 @@ namespace core
 			}
 		}
 	}
-
 
 	void FileLogAppender::appender(const LogMsg& msg)
 	{
@@ -218,6 +218,7 @@ namespace core
 	void Logger::info(const std::ostringstream& log)
 	{
 		LogMsg msg;
+		msg.level = ELogLevel::Info;
 		msg.time = TimeHelp::now_milli().count();
 		msg.log = log.str();
 		_logAppender->push(std::move(msg));

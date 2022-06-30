@@ -53,8 +53,8 @@ namespace core
 		info.min = tm->tm_min;
 		info.hour = tm->tm_hour;
 		info.day = tm->tm_mday;
-		info.mon = tm->tm_mon;
-		info.year = tm->tm_year;
+		info.mon = tm->tm_mon + 1;
+		info.year = tm->tm_year;	
 		info.yday = tm->tm_yday;
 		return info;
 	}
