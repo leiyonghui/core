@@ -20,11 +20,14 @@ namespace core
 	int64 TimerHander::addTimer(int64 id, Tick delay, Tick duration, int32 times, TimeoutCallback&& callback)
 	{
 		assert(id >= 0);
+
 		if (_scheduler == nullptr)
 			return 0;
 		if (!id)
 			id = nextId();
+
 		assert(hasTimer(id));
+
 		TimerEvent* event = new TimerEvent(id, this, delay, duration, times, std::forward<TimeoutCallback>(callback));
 		event->_invalid = false;
 		_scheduler->addTimer(event);
@@ -61,12 +64,12 @@ namespace core
 	bool TimerHander::cancel(int64 id)
 	{
 		if (_scheduler == nullptr)
-			return true;
+			return false;
+
 		auto iter = _timerMap.find(id);
 		if (iter == _timerMap.end())
-		{
 			return false;
-		}
+
 		_scheduler->delTimer(iter->second);
 		iter->second->_hander = nullptr;
 		_timerMap.erase(iter);
