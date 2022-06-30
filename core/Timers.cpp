@@ -26,7 +26,7 @@ namespace core
 		if (!id)
 			id = nextId();
 
-		assert(hasTimer(id));
+		assert(!hasTimer(id));
 
 		TimerEvent* event = new TimerEvent(id, this, delay, duration, times, std::forward<TimeoutCallback>(callback));
 		event->_invalid = false;
@@ -57,8 +57,7 @@ namespace core
 
 	bool TimerHander::hasTimer(int64 id)
 	{
-		auto iter = _timerMap.find(id);
-		return iter != _timerMap.end();
+		return _timerMap.find(id) != _timerMap.end();
 	}
 
 	bool TimerHander::cancel(int64 id)
