@@ -33,7 +33,7 @@ namespace core
 			return _handler->addTimer(id, delay, duration, [callback, weak]() {
 				if (!weak.expired())
 				{
-					callback(std::shared_ptr<T>(weak));
+					callback(std::dynamic_pointer_cast<T>(weak.lock()));
 				}
 			});
 		}
@@ -45,7 +45,7 @@ namespace core
 			return _handler->addTimer(id, time, duration, [callback, weak]() {
 				if (!weak.expired())
 				{
-					callback(std::shared_ptr<T>(weak));
+					callback(std::dynamic_pointer_cast<T>(weak.lock()));
 				}
 			});
 		}

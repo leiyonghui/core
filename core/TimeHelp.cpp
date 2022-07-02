@@ -54,7 +54,7 @@ namespace core
 		info.hour = tm->tm_hour;
 		info.day = tm->tm_mday;
 		info.mon = tm->tm_mon + 1;
-		info.year = tm->tm_year;	
+		info.year = tm->tm_year + 1900;	
 		info.yday = tm->tm_yday;
 		return info;
 	}

@@ -139,6 +139,7 @@ namespace core
 				out.second = new std::ofstream(name, std::ofstream::out | std::ofstream::app | std::ofstream::binary);
 			}
 			(*out.second) << str;
+			out.second->flush();
 			if (_console)
 			{
 				fwrite(str.c_str(), 1, str.length(), stdout);
@@ -152,6 +153,7 @@ namespace core
 				out.second = new std::ofstream(_filename.c_str(), std::ofstream::out | std::ofstream::app | std::ofstream::binary);
 			}
 			(*out.second) << str;
+			out.second->flush();
 			if (_console)
 			{
 				fwrite(str.c_str(), 1, str.length(), stdout);
