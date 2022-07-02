@@ -51,17 +51,17 @@ namespace core
 	};
 
 
-	const int32 INIT_SIZE = 8;
-
 	template<class T, class F = void>
 	class CObjectPool;
 
 	template<class T>
 	class CObjectPool<T, std::enable_if_t<std::is_base_of<CPoolObject, T>::value, void>>
 	{
+	public:
 		using List = std::list<T*>;
 		using Deleter = typename std::function<void(T*)>;
-	public:
+
+		static const int32 INIT_SIZE = 8;
 
 		CObjectPool(std::enable_if_t <std::is_base_of<CPoolObject, T>::value, int> initSize = INIT_SIZE) :_useCount(0), _freeCount(0), _initSize(initSize){
 			CObjectPoolMonitor::monitorPool(typeid(T).name(), []() { CObjectPool<T>::Instance()->printInfo(); });
@@ -169,12 +169,19 @@ namespace core
 
 
 	template<class T>
-	class CObjectPool<T, std::enable_if_t<!std::is_base_of<CPoolObject, T>::value, void>>
+	class CObjectPool<T, std::enable_if_t<!std::is_base_of_v<CPoolObject, T>, void>>
 	{
 	public:
-		CObjectPool
+		static const int32 MAX_SIZE = 64;
+
+		CObjectPool(int32 maxsize = MAX_SIZE):_maxsize(maxsize), _pool(new T[_maxsize])
 		{
 
+		}
+
+		virtual ~CObjectPool()
+		{
+			delete[] _pool;
 		}
 
 		static CObjectPool<T>* Instance()
@@ -195,6 +202,9 @@ namespace core
 		static CObjectPool<T>* _instance;
 
 		int32 _maxsize;
-
+		T* _pool;
 	};
+	
+	template<class T>
+	CObjectPool<T>* CObjectPool<T, std::enable_if_t<!std::is_base_of_v<CPoolObject, T>, void> >::_instance = nullptr;
 }
