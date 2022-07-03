@@ -114,16 +114,6 @@ namespace core
 		}
 
 	private:
-		static CObjectPool<T>* _instance;
-
-		std::mutex _mutexFree;
-		std::mutex _mutexRecycle;
-		List	_freeObjects;
-		List	_recycleObjects;
-		int32	_useCount;
-		std::atomic_int	  _freeCount;
-		std::atomic_int   _initSize;
-
 		T* popObject()
 		{
 			T* ptr = nullptr;
@@ -162,10 +152,22 @@ namespace core
 			++_freeCount;
 			--_useCount;
 		}
+
+	private:
+		static CObjectPool<T>* _instance;
+
+		std::mutex _mutexFree;
+		std::mutex _mutexRecycle;
+		List	_freeObjects;
+		List	_recycleObjects;
+		int32	_useCount;
+		std::atomic_int	  _freeCount;
+		std::atomic_int   _initSize;
 	};
 
 	template<class T>
 	CObjectPool<T>* CObjectPool<T, std::enable_if_t<std::is_base_of<CPoolObject, T>::value, void>>::_instance = nullptr;
+
 
 
 	template<class T>
@@ -174,16 +176,22 @@ namespace core
 	public:
 		static const int32 MAX_SIZE = 64;
 
-		CObjectPool(int32 maxsize = MAX_SIZE):_maxsize(maxsize), _pool(new T[_maxsize])
+		CObjectPool(int32 maxsize = MAX_SIZE):_maxsize(maxsize), _ptr(static_cast<T*>(::operator new(sizeof(T) * _maxsize))), _objcount(0)//malloc
 		{
+			for (int32 i = 0; i < _maxsize; ++i)
+				_pool.push_back(i);
 
+			CObjectPoolMonitor::monitorPool(typeid(T).name(), []() { CObjectPool<T>::Instance()->printInfo(); });
 		}
+
+		CObjectPool(const CObjectPool&) = delete;
 
 		virtual ~CObjectPool()
 		{
-			delete[] _pool;
+			::operator delete(_ptr);//free
 		}
 
+	public:
 		static CObjectPool<T>* Instance()
 		{
 			if (!_instance)
@@ -193,16 +201,117 @@ namespace core
 
 		static void Instance(CObjectPool<T>* ptr)
 		{
-			if (_instance)
-				delete _instance;
+			assert(_instance == nullptr);
 			_instance = ptr;
+		}
+
+	public:
+
+		template<class ...Args>
+		std::shared_ptr<T> create(Args&& ...args)
+		{
+			auto index = popIndex();
+			if (index >= 0)
+			{
+				auto ptr = (void*)(_ptr + index);
+				new(ptr) T(std::forward<Args>(args)...);		//调用构造函数,注意要用void*
+
+				++_objcount;
+				return std::shared_ptr<T>((T*)ptr, [index, this](T* ptr) { 
+					ptr->~T();			//调用析构
+					recycle(index);
+					--_objcount;
+				});
+			}
+			else
+			{
+				auto ptr = new T(std::forward<Args>(args)...);
+
+				++_objcount;
+				return std::shared_ptr<T>(ptr, [this](T* ptr) {
+					delete ptr;
+					--_objcount;
+				});
+			}
+		}
+
+		using Deleter = typename std::function<void(T*)>;
+
+		template<class ...Args>
+		std::unique_ptr<T, Deleter> createUnique(Args&& ...args)
+		{
+			auto index = popIndex();
+			if (index >= 0)
+			{
+				auto ptr = (void*)(_ptr + index);
+				new(ptr) T(std::forward<Args>(args)...);		//调用构造函数
+
+				++_objcount;
+				return std::unique_ptr<T, Deleter>((T*)ptr, [index, this](T* ptr) {
+					ptr->~T();	//调用析构
+					recycle(index);
+					--_objcount;
+				});
+			}
+			else
+			{
+				auto ptr = new T(std::forward<Args>(args)...);
+
+				++_objcount;
+				return std::unique_ptr<T, Deleter>(ptr, [](T* ptr) { 
+					delete ptr;
+					--_objcount;
+				});
+			}
+		}
+
+		void printInfo()
+		{
+			core_log_info(typeid(T).name(), "using:", getUseCount(), "obj:", getObjectCount(), "maxsize:", _maxsize);
+		}
+
+		int32 getUseCount()
+		{
+			int32 sz = 0;
+			{
+				std::unique_lock<std::mutex> locker(_mutex);
+				sz = int32(_pool.size());
+			}
+			return _maxsize - sz;
+		}
+
+		int32 getObjectCount() const
+		{
+			return _objcount;
+		}
+
+	protected:
+		int32 popIndex()
+		{
+			std::unique_lock<std::mutex> locker(_mutex);
+			if (!_pool.empty())
+			{
+				auto index = _pool.front();
+				_pool.pop_front();
+				return index;
+			}
+			return -1;
+		}
+
+		void recycle(int32 index)
+		{
+			std::unique_lock<std::mutex> locker(_mutex);
+			_pool.push_back(index);
 		}
 
 	private:
 		static CObjectPool<T>* _instance;
 
-		int32 _maxsize;
-		T* _pool;
+		const int32			_maxsize;
+		T*					_ptr;
+		std::atomic_int		_objcount;
+		std::list<int32>	_pool;
+		std::mutex			_mutex;
 	};
 	
 	template<class T>

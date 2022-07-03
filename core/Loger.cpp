@@ -82,8 +82,7 @@ namespace core
 		str.reserve(msg.log.size() + 1);
 		str.append(msg.log);
 		str.push_back('\n');
-		fwrite(msg.log.c_str(), 1, msg.log.length(), stdout);
-		//std::cout << msg.log << std::endl;
+		fwrite(str.c_str(), 1, str.length(), stdout);
 	}
 
 	FileLogAppender::FileLogAppender(const std::string& filename, bool console) :ConsoleLogAppender(), _filename(filename), _timed(false), _console(console), _pid(core::GetPid()), _outs(2)
