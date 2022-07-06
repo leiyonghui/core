@@ -11,6 +11,7 @@ namespace core
 			virtual ~TimerSet();
 
 			Tick tick() { return _curTick; }
+			Tick topTick() { return _queue.empty() ? 0 : _queue.begin()->first; }
 			void addTimer(TimerEvent* event) override;
 			void delTimer(TimerEvent* event) override;
 			void update(Tick now) override;
