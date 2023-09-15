@@ -125,6 +125,8 @@ namespace core
 
 		virtual Tick tick() = 0;
 
+		virtual Tick topTick() = 0;
+
 		virtual void update(Tick now) = 0;
 
 		virtual void addTimer(TimerEvent* event) = 0;

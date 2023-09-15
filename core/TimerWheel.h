@@ -18,6 +18,8 @@ namespace core
 
 			Tick tick() { return _curTick; };
 
+			Tick topTick() { return 0; }
+
 			void addTimer(TimerEvent* event) override;
 
 			void delTimer(TimerEvent* event) override;

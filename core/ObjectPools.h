@@ -63,7 +63,7 @@ namespace core
 
 		static const int32 INIT_SIZE = 8;
 
-		CObjectPool(std::enable_if_t <std::is_base_of<CPoolObject, T>::value, int> initSize = INIT_SIZE) :_useCount(0), _freeCount(0), _initSize(initSize){
+		CObjectPool(std::enable_if_t <std::is_base_of<CPoolObject, T>::value, int> initsize = INIT_SIZE) :_usecount(0), _freecount(0), _initsize(initsize){
 			CObjectPoolMonitor::monitorPool(typeid(T).name(), []() { CObjectPool<T>::Instance()->printInfo(); });
 		}
 
@@ -95,9 +95,9 @@ namespace core
 			core_log_info(typeid(T).name(), "using:", getUseCount(), "free:", getFreeCount());
 		}
 
-		int32 getUseCount() const { return _useCount; }
+		int32 getUseCount() const { return _usecount; }
 
-		int32 getFreeCount() const { return _freeCount; }
+		int32 getFreeCount() const { return _freecount; }
 
 		static CObjectPool<T>* Instance()
 		{
@@ -118,26 +118,26 @@ namespace core
 		{
 			T* ptr = nullptr;
 			{
-				std::lock_guard<std::mutex> lock(_mutexFree);
+				std::lock_guard<std::mutex> lock(_freemutex);
 				if (_freeObjects.empty())
 				{
 					int32 add = 0;
 					{
-						std::lock_guard<std::mutex> lock2(_mutexRecycle);
+						std::lock_guard<std::mutex> lock2(_recyclemutex);
 						if (!_recycleObjects.empty())
 						{
 							add = int32(_recycleObjects.size());
 							_freeObjects.splice(_freeObjects.end(), _recycleObjects);
 						}
 					}
-					for (int32 i = 0; i < _initSize - add; ++i, ++_freeCount)
+					for (int32 i = 0; i < _initsize - add; ++i, ++_freecount)
 						_freeObjects.push_back(new T());
 				}
 				ptr = _freeObjects.front();
 				_freeObjects.pop_front();
 			}
-			++_useCount;
-			--_freeCount;
+			++_usecount;
+			--_freecount;
 			return ptr;
 		}
 
@@ -146,23 +146,23 @@ namespace core
 			ptr->onRecycle();
 			ptr->setUsing(false);
 			{
-				std::lock_guard<std::mutex> lock(_mutexRecycle);
+				std::lock_guard<std::mutex> lock(_recyclemutex);
 				_recycleObjects.push_back(ptr);
 			}
-			++_freeCount;
-			--_useCount;
+			++_freecount;
+			--_usecount;
 		}
 
 	private:
 		static CObjectPool<T>* _instance;
 
-		std::mutex _mutexFree;
-		std::mutex _mutexRecycle;
+		std::mutex _freemutex;
+		std::mutex _recyclemutex;
 		List	_freeObjects;
 		List	_recycleObjects;
-		int32	_useCount;
-		std::atomic_int	  _freeCount;
-		std::atomic_int   _initSize;
+		int32	_usecount;
+		std::atomic_int	  _freecount;
+		std::atomic_int   _initsize;
 	};
 
 	template<class T>
